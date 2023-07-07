@@ -1,0 +1,35 @@
+#
+# This is a CMake project file for Temperature Controller application.
+#
+cmake_minimum_required(VERSION 3.19.0)
+
+project(TemeratureController VERSION 0.0.0.1 LANGUAGES CXX)
+
+################################################################
+# Configurations
+################################################################
+include(${CMAKE_CURRENT_SOURCE_DIR}/Build/DefaultCmakeSettings.cmake)
+
+################################################################
+# VARIABLES
+################################################################
+set(TEMPERATURE_CONTROLLER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Include")
+set(TEMPERATURE_CONTROLLER_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Src")
+set(TEMPERATURE_CONTROLLER_TARGET_NAME temprature_controller)
+
+################################################################
+# TARGESTS
+################################################################
+
+# Add source to this project's executable.
+add_executable(${TEMPERATURE_CONTROLLER_TARGET_NAME})
+add_subdirectory(${TEMPERATURE_CONTROLLER_SOURCE_DIR})
+
+################################################################
+# INCLUDES
+################################################################
+
+target_include_directories(${TEMPERATURE_CONTROLLER_TARGET_NAME}
+    PRIVATE ${TEMPERATURE_CONTROLLER_INCLUDE_DIR}
+)
+
