@@ -10,7 +10,7 @@
 #include "CommonConfig.hpp"
 
 #include "Interfaces/IProgram.hpp"
-#include "Interfaces/ISessionManager.hpp"
+#include "Interfaces/ITemperatureManager.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
@@ -28,11 +28,11 @@ namespace Internal
         /**
          * @brief Construct a new Program object.
          *
-         * @param[in] sessionManager A reference of test session object.
+         * @param[in] temperatureManager A reference of temperature manager object.
          *
          * @throw XArgumentNull If input params are null.
          */
-        Program(std::shared_ptr<Interfaces::ISessionManager> sessionManager);
+        Program(std::shared_ptr<Interfaces::ITemperatureManager> temperatureManager);
 
         /**
          * @brief Destroy the Program object.
@@ -53,9 +53,9 @@ namespace Internal
         // #region Private Members
 
         /**
-         * @brief A session manager object to manage end-to-end processing of test flow.
+         * @brief A manager object to manage end-to-end monitoring and controlling the temperature.
          */
-        std::shared_ptr<Interfaces::ISessionManager> _sessionManager;
+        std::shared_ptr<Interfaces::ITemperatureManager> _temperatureManager;
 
         // #endregion
     };

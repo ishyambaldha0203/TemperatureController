@@ -13,7 +13,7 @@
 #include "Interfaces/Factories/IGenericObjectFactoryT.hpp"
 
 #include "Interfaces/IProgram.hpp"
-#include "Interfaces/ISessionManager.hpp"
+#include "Interfaces/ITemperatureManager.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace FactoryInterfaces
@@ -28,11 +28,11 @@ namespace FactoryInterfaces
     using IProgramFactory = IGenericObjectFactoryT<Interfaces::IProgram>;
 
     /**
-     * @interface ISessionManagerFactory
+     * @interface ITemperatureManagerFactory
      *
-     * @brief Factory interface for concrete classes that implements @ref ISessionManager.
+     * @brief Factory interface for concrete classes that implements @ref ITemperatureManager.
      */
-    using ISessionManagerFactory = IGenericObjectFactoryT<Interfaces::ISessionManager>;
+    using ITemperatureManagerFactory = IGenericObjectFactoryT<Interfaces::ITemperatureManager>;
 
     // #endregion
 

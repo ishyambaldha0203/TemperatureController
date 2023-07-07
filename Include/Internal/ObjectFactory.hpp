@@ -22,13 +22,13 @@ namespace Internal
      * @brief Concrete implementation main object factory.
      */
     class ObjectFactory : public FactoryInterfaces::IProgramFactory,
-                          public FactoryInterfaces::ISessionManagerFactory,
+                          public FactoryInterfaces::ITemperatureManagerFactory,
                           public  std::enable_shared_from_this<ObjectFactory>
     {
         // #region Type Aliases
 
         using ProgramFactoryInterfacePtr = FactoryInterfaces::IProgramFactory::InterfaceSharedPointer;
-        using SessionManagerFactoryInterfacePtr = FactoryInterfaces::ISessionManagerFactory::InterfaceSharedPointer;
+        using TemperatureManagerFactoryInterfacePtr = FactoryInterfaces::ITemperatureManagerFactory::InterfaceSharedPointer;
 
         // #endregion
 
@@ -50,7 +50,7 @@ namespace Internal
         // #region Implementation of Factories
 
         virtual void Create(ProgramFactoryInterfacePtr& objectPtr) override;
-        virtual void Create(SessionManagerFactoryInterfacePtr& objectPtr) override;
+        virtual void Create(TemperatureManagerFactoryInterfacePtr& objectPtr) override;
 
         // #endregion
 

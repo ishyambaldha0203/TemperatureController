@@ -10,7 +10,7 @@
 #include "Internal/ObjectFactory.hpp"
 
 #include "Internal/Program.hpp"
-#include "Internal/SessionManager.hpp"
+#include "Internal/TemperatureManager.hpp"
 
 // #region Namespace Symbols
 
@@ -33,15 +33,15 @@ namespace Internal
 
     void ObjectFactory::Create(IProgramFactory::InterfaceSharedPointer &objectPtr)
     {
-        ISessionManagerFactory::InterfaceSharedPointer sessionManager;
-        Create(sessionManager);
+        ITemperatureManagerFactory::InterfaceSharedPointer temperatureManager;
+        Create(temperatureManager);
 
-        objectPtr = std::make_shared<Program>(sessionManager);
+        objectPtr = std::make_shared<Program>(temperatureManager);
     }
 
-    void ObjectFactory::Create(ISessionManagerFactory::InterfaceSharedPointer &objectPtr)
+    void ObjectFactory::Create(ITemperatureManagerFactory::InterfaceSharedPointer &objectPtr)
     {
-        objectPtr = std::make_shared<SessionManager>();
+        objectPtr = std::make_shared<TemperatureManager>();
     }
 
     // #endregion

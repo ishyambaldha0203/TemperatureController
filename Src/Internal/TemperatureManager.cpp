@@ -1,11 +1,11 @@
 /*************************************************************************************************
- * @file SessionManager.cpp
+ * @file TemperatureManager.cpp
  *
- * @brief Concrete implementation of @ref SessionManager class.
+ * @brief Concrete implementation of @ref TemperatureManager class.
  *
  *************************************************************************************************/
 
-#include "Internal/SessionManager.hpp"
+#include "Internal/TemperatureManager.hpp"
 
 #include "Exceptions/XBaseException.hpp"
 
@@ -21,17 +21,17 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    SessionManager::SessionManager() = default;
+    TemperatureManager::TemperatureManager() = default;
 
-    SessionManager::~SessionManager() = default;
+    TemperatureManager::~TemperatureManager() = default;
 
     // #endregion
 
     // #region Public Methods
 
-    void SessionManager::Begin()
+    void TemperatureManager::Begin()
     {
-        std::cout << "Temperature Monitor session started !!!" << std::endl;
+        std::cout << "Temperature monitoring and controlling has started !!!" << std::endl;
     }
 
     // #endregion

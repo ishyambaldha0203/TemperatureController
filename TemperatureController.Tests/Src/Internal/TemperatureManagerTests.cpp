@@ -1,7 +1,7 @@
 /*************************************************************************************************
- * @file SessionManagerTests.cpp
+ * @file TemperatureManagerTests.cpp
  *
- * @brief Contains unit tests for class @ref SessionManager.
+ * @brief Contains unit tests for class @ref TemperatureManager.
  *
  *************************************************************************************************/
 
@@ -11,7 +11,7 @@ namespace
 {
     // #region Unit Tests
 
-    TEST(SessionManagerTest, PlaceholderTest)
+    TEST(TemperatureManagerTest, PlaceholderTest)
     {
         int32_t i = 1;
         int32_t j = 2;

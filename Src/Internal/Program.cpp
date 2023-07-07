@@ -24,12 +24,12 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    Program::Program(std::shared_ptr<ISessionManager> sessionManager)
-        : _sessionManager(sessionManager)
+    Program::Program(std::shared_ptr<ITemperatureManager> temperatureManager)
+        : _temperatureManager(temperatureManager)
     {
-        if (nullptr == _sessionManager)
+        if (nullptr == _temperatureManager)
         {
-            throw XArgumentNull("Program::sessionManager");
+            throw XArgumentNull("Program::temperatureManager");
         }
     }
 
@@ -43,7 +43,7 @@ namespace Internal
     {
         try
         {
-            _sessionManager->Begin();
+            _temperatureManager->Begin();
         }
         catch (const XBaseException &ex)
         {

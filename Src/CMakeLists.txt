@@ -11,5 +11,5 @@ target_sources(${TEMPERATURE_CONTROLLER_TARGET_NAME}
         # Src/Internal
         ${CMAKE_CURRENT_LIST_DIR}/Internal/ObjectFactory.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/Program.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/Internal/SessionManager.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Internal/TemperatureManager.cpp
 )
