@@ -9,8 +9,7 @@
 
 #include "CommonConfig.hpp"
 
-#include <memory>
-
+#include "Interfaces/Factories/IApplianceFactory.hpp"
 #include "Interfaces/Factories/IObjectFactories.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
@@ -21,14 +20,24 @@ namespace Internal
      *
      * @brief Concrete implementation main object factory.
      */
-    class ObjectFactory : public FactoryInterfaces::IProgramFactory,
+    class ObjectFactory : public FactoryInterfaces::IApplianceFactory,
+                          public FactoryInterfaces::IDisplayManagerFactory,
+                          public FactoryInterfaces::IProgramFactory,
                           public FactoryInterfaces::ITemperatureManagerFactory,
+                          public FactoryInterfaces::ITemperatureSensorFactory,
+                          public FactoryInterfaces::ITemperatureSimulatorFactory,
+                          public FactoryInterfaces::ISystemConfigFactory,
                           public  std::enable_shared_from_this<ObjectFactory>
     {
         // #region Type Aliases
 
+        using ApplianceFactoryInterfacePtr = FactoryInterfaces::IApplianceFactory::InterfaceSharedPointer;
+        using DisplayManagerFactoryInterfacePtr = FactoryInterfaces::IDisplayManagerFactory::InterfaceSharedPointer;
         using ProgramFactoryInterfacePtr = FactoryInterfaces::IProgramFactory::InterfaceSharedPointer;
         using TemperatureManagerFactoryInterfacePtr = FactoryInterfaces::ITemperatureManagerFactory::InterfaceSharedPointer;
+        using TemperatureSensorFactoryInterfacePtr = FactoryInterfaces::ITemperatureSensorFactory::InterfaceSharedPointer;
+        using TemperatureSimulatorFactoryInterfacePtr = FactoryInterfaces::ITemperatureSimulatorFactory::InterfaceSharedPointer;
+        using SystemConfigFactoryInterfacePtr = FactoryInterfaces::ISystemConfigFactory::InterfaceSharedPointer;
 
         // #endregion
 
@@ -49,8 +58,14 @@ namespace Internal
 
         // #region Implementation of Factories
 
-        virtual void Create(ProgramFactoryInterfacePtr& objectPtr) override;
-        virtual void Create(TemperatureManagerFactoryInterfacePtr& objectPtr) override;
+        virtual void Create(DisplayManagerFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(ProgramFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(TemperatureManagerFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(TemperatureSensorFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(TemperatureSimulatorFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(SystemConfigFactoryInterfacePtr &objectPtr) override;
+        virtual void CreateCooler(ApplianceFactoryInterfacePtr &objectPtr) override;
+        virtual void CreateHeater(ApplianceFactoryInterfacePtr &objectPtr) override;
 
         // #endregion
 
@@ -58,6 +73,16 @@ namespace Internal
         DECLARE_NON_COPYABLE_CLASS(ObjectFactory)
 
         // #region Private Members
+
+        /**
+         * @brief To create singleton instance of system config.
+         */
+        std::shared_ptr<EntityInterfaces::ISystemConfig> _systemConfig;
+
+        /**
+         * @brief To create singleton instance of system config.
+         */
+        std::shared_ptr<Interfaces::ITemperatureSimulator> _temperatureSimulator;
 
         /**
          * @brief This is to inject the common factory through constructor of all the other required classes.

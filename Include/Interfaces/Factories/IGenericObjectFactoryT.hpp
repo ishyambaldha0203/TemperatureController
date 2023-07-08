@@ -9,8 +9,6 @@
 
 #include "CommonConfig.hpp"
 
-#include <memory>
-
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace FactoryInterfaces
 {

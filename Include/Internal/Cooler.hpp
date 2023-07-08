@@ -1,0 +1,66 @@
+/*************************************************************************************************
+ * @file Cooler.hpp
+ *
+ * @brief Declarations for the concrete class @ref Cooler.
+ *
+ *************************************************************************************************/
+#ifndef _TEMPERATURE_CONTROLLER_INTERNAL_COOLER_HPP
+#define _TEMPERATURE_CONTROLLER_INTERNAL_COOLER_HPP
+
+#include "CommonConfig.hpp"
+
+#include "Interfaces/IAppliance.hpp"
+#include "Interfaces/Entities/ISystemConfig.hpp"
+
+BEGIN_TEMPERATURE_CONTROLLER_NS
+namespace Internal
+{
+    /**
+     * @class Cooler
+     *
+     * @brief Concrete implementation of the Cooler.
+     */
+    class Cooler : public Interfaces::IAppliance
+    {
+    public:
+        // #region Construction/Destruction
+
+        /**
+         * @brief Construct a new cooler object.
+         */
+        Cooler(std::shared_ptr<EntityInterfaces::ISystemConfig> systemConfig);
+
+        /**
+         * @brief Destroy the cooler object.
+         */
+        virtual ~Cooler() override;
+
+        // #endregion
+
+        // #region IAppliance Implementation
+
+        virtual void Start() override;
+
+        virtual void Stop() override;
+
+        virtual bool IsRunning() override;
+
+        // #endregion
+
+    private:
+        DECLARE_NON_COPYABLE_CLASS(Cooler)
+
+        /**
+         * @brief To set cooling intensity with system level configuration.
+         */
+        std::shared_ptr<EntityInterfaces::ISystemConfig> _systemConfig;
+
+        /**
+         * @brief Cooler running status.
+         */
+        bool _isRunning;
+    };
+} // namespace Internal
+END_TEMPERATURE_CONTROLLER_NS
+
+#endif // !_TEMPERATURE_CONTROLLER_INTERNAL_COOLER_HPP

@@ -41,6 +41,8 @@ namespace Internal
 
     int32_t Program::Run()
     {
+        std::cout << "Temperature monitoring and controlling has started!!!\n\n" << std::endl;
+
         try
         {
             _temperatureManager->Begin();
