@@ -43,7 +43,12 @@ namespace Internal
 
     void ObjectFactory::Create(IDisplayManagerFactory::InterfaceSharedPointer &objectPtr)
     {
-        objectPtr = std::make_shared<DisplayManager>();
+        if (nullptr == _displayManager)
+        {
+            _displayManager = std::make_shared<DisplayManager>();
+        }
+
+        objectPtr = _displayManager;
     }
 
     void ObjectFactory::Create(IProgramFactory::InterfaceSharedPointer &objectPtr)
@@ -140,7 +145,10 @@ namespace Internal
         IApplianceConfigFactory::InterfaceSharedPointer applianceConfig;
         Create(applianceConfig);
 
-        objectPtr = std::make_shared<Cooler>(applianceConfig);
+        IDisplayManagerFactory::InterfaceSharedPointer displayManager;
+        Create(displayManager);
+
+        objectPtr = std::make_shared<Cooler>(applianceConfig, displayManager);
     }
 
     void ObjectFactory::CreateHeater(IApplianceFactory::InterfaceSharedPointer &objectPtr)
@@ -148,7 +156,10 @@ namespace Internal
         IApplianceConfigFactory::InterfaceSharedPointer applianceConfig;
         Create(applianceConfig);
 
-        objectPtr = std::make_shared<Heater>(applianceConfig);
+        IDisplayManagerFactory::InterfaceSharedPointer displayManager;
+        Create(displayManager);
+
+        objectPtr = std::make_shared<Heater>(applianceConfig, displayManager);
     }
 
     // #endregion

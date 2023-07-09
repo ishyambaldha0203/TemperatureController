@@ -10,6 +10,7 @@
 #include "CommonConfig.hpp"
 
 #include "Interfaces/IAppliance.hpp"
+#include "Interfaces/IDisplayManager.hpp"
 #include "Interfaces/Entities/IApplianceConfig.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
@@ -27,10 +28,11 @@ namespace Internal
 
         /**
          * @brief Construct a new Heater object.
-         * 
-         * @param applianceConfig 
+         *
+         * @param applianceConfig
          */
-        Heater(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig);
+        Heater(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig,
+               std::shared_ptr<Interfaces::IDisplayManager> displayManager);
 
         /**
          * @brief Destroy the heater object.
@@ -40,6 +42,8 @@ namespace Internal
         // #endregion
 
         // #region IAppliance Implementation
+
+        virtual void Initialize(float intensity) override;
 
         virtual void Start() override;
 
@@ -58,9 +62,19 @@ namespace Internal
         std::shared_ptr<EntityInterfaces::IApplianceConfig> _applianceConfig;
 
         /**
+         * @brief To display start stop event.
+         */
+        std::shared_ptr<Interfaces::IDisplayManager> _displayManager;
+
+        /**
          * @brief Cooler running status.
          */
         bool _isRunning;
+
+        /**
+         * @brief Store the heating intensity provided by controller.
+         */
+        float _heatingIntensity;
     };
 } // namespace Internal
 END_TEMPERATURE_CONTROLLER_NS

@@ -22,6 +22,13 @@ namespace Interfaces
         DECLARE_INTERFACE_DEFAULTS(IAppliance)
 
         /**
+         * @brief Initialise the appliances with change intensity.
+         *
+         * @param intensity Appliance running intensity.
+         */
+        virtual void Initialize(float intensity) = 0;
+
+        /**
          * @brief Start the appliance.
          */
         virtual void Start() = 0;

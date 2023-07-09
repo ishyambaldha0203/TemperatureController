@@ -9,6 +9,8 @@
 
 #include "CommonConfig.hpp"
 
+#include <atomic>
+
 #include "Interfaces/Entities/IApplianceConfigMutable.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
@@ -73,13 +75,17 @@ namespace Entities
 
         /**
          * @brief Store heating intensity value.
+         *
+         * @note It is atomic as there may be a chance that two thread try to access it at the same time.
          */
-        float _heatingIntensity;
+        std::atomic<float> _heatingIntensity;
 
         /**
          * @brief Store cooling intensity value.
+         *
+         * @note It is atomic as there may be a chance that two thread try to access it at the same time.
          */
-        float _coolingIntensity;
+        std::atomic<float> _coolingIntensity;
 
         // #endregion
     };

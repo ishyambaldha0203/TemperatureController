@@ -19,19 +19,36 @@ using namespace TEMPERATURE_CONTROLLER_NS::Interfaces;
 
 // #endregion
 
+namespace
+{
+    namespace Default
+    {
+        constexpr const float CoolingIntensity = 0.25f;
+    }
+}
+
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
 {
     // #region Construction/Destruction
 
-    Cooler::Cooler(std::shared_ptr<IApplianceConfig> applianceConfig)
+    Cooler::Cooler(std::shared_ptr<IApplianceConfig> applianceConfig,
+                   std::shared_ptr<IDisplayManager> displayManager)
         : _applianceConfig(applianceConfig),
+          _displayManager(displayManager),
           _isRunning(false)
     {
         if (nullptr == applianceConfig)
         {
             throw XArgumentNull("Cooler::applianceConfig");
         }
+
+        if (nullptr == displayManager)
+        {
+            throw XArgumentNull("Cooler::displayManager");
+        }
+
+        _coolingIntensity = Default::CoolingIntensity;
     }
 
     Cooler::~Cooler() = default;
@@ -40,23 +57,29 @@ namespace Internal
 
     // #region Public Methods
 
+    void Cooler::Initialize(float coolingIntensity)
+    {
+        if (coolingIntensity > 0)
+        {
+            _coolingIntensity = coolingIntensity;
+        }
+    }
+
     void Cooler::Start()
     {
-        std::cout << "\nCooler started...\n"
-                  << std::endl;
+        _displayManager->PopulateText("\n**** Cooler Started ****\n\n");
 
         std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
             std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);
 
-        applianceConfigMutable->SetCoolingIntensity(0.25f);
+        applianceConfigMutable->SetCoolingIntensity(_coolingIntensity);
 
         _isRunning = true;
     }
 
     void Cooler::Stop()
     {
-        std::cout << "\nCooler stopped...\n"
-                  << std::endl;
+        _displayManager->PopulateText("\n**** Cooler Stopped ****\n\n");
 
         std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
             std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);

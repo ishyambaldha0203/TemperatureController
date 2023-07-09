@@ -48,6 +48,9 @@ namespace Internal
     {
         _minTemperature = systemConfig.GetMinTemperatureRange();
         _maxTemperature = systemConfig.GetMaxTemperatureRange();
+
+        _cooler->Initialize(systemConfig.GetCoolingIntensity());
+        _heater->Initialize(systemConfig.GetHeatingIntensity());
     }
 
     void TemperatureController::RegulateTemperature(float currentTemperature)

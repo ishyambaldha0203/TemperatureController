@@ -18,6 +18,14 @@ using namespace TEMPERATURE_CONTROLLER_NS::Interfaces;
 
 // #endregion
 
+namespace
+{
+    namespace Default
+    {
+        constexpr const uint32_t SensorTimeCycleSeconds = 1; ///< Timing to be used by sensor to read the temperature.
+    }
+}
+
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
 {
@@ -55,7 +63,8 @@ namespace Internal
 
                     NotifyObservers(temperature);
 
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    // TODO: Get the delay value from the system configuration entity.
+                    std::this_thread::sleep_for(std::chrono::seconds(Default::SensorTimeCycleSeconds));
                 }
             });
     }

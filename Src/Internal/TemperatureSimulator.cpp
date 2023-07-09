@@ -20,6 +20,15 @@ using namespace TEMPERATURE_CONTROLLER_NS::EntityInterfaces;
 
 // #endregion
 
+namespace
+{
+    namespace Default
+    {
+        constexpr const float SimulationIntensity = 0.5f;        ///< Used by simulator to generate random temperature between -0.5f to +0.5f.
+        constexpr const uint32_t SimulationTimeCycleSeconds = 1; ///< Timing to be used bu simulator to update temperature.
+    }
+}
+
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
 {
@@ -34,6 +43,8 @@ namespace Internal
         {
             throw XArgumentNull("TemperatureSimulator::applianceConfig");
         }
+
+        _simulationIntensity = Default::SimulationIntensity;
     }
 
     TemperatureSimulator::~TemperatureSimulator() = default;
@@ -41,6 +52,11 @@ namespace Internal
     // #endregion
 
     // #region Public Methods
+
+    void TemperatureSimulator::Initialize(const ISystemConfig &systemConfig)
+    {
+        _simulationIntensity = systemConfig.GetSimulationIntensity();
+    }
 
     float TemperatureSimulator::GetTemperature() const
     {
@@ -55,7 +71,7 @@ namespace Internal
         std::mt19937 randomNumGenerator{std::random_device{}()};
 
         // Generate the random number in range of -0.5 to +0.5.
-        std::normal_distribution<float> distribution{0.0f, 0.5f};
+        std::normal_distribution<float> distribution{0.0f, _simulationIntensity};
 
         _simulatorFuture =
             std::async(std::launch::async, [this, &randomNumGenerator, &distribution, &startingTemperature]()
@@ -70,8 +86,8 @@ namespace Internal
                     // Update current temperature.
                     _currentTemperature.store(temperature);
 
-                    // TODO: Get the delay value from configuration.
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    // TODO: Get the delay value from configuration entity.
+                    std::this_thread::sleep_for(std::chrono::seconds(Default::SimulationTimeCycleSeconds));
                 }
             });
     }

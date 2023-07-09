@@ -9,6 +9,8 @@
 
 #include "CommonConfig.hpp"
 
+#include "Interfaces/Entities/ISystemConfig.hpp"
+
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Interfaces
 {
@@ -20,6 +22,13 @@ namespace Interfaces
     interface ITemperatureSimulator
     {
         DECLARE_INTERFACE_DEFAULTS(ITemperatureSimulator)
+
+        /**
+         * @brief Initialize the simulator to update the temperature accordingly.
+         *
+         * @param systemConfig entity that contains system level configurations.
+         */
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) = 0;
 
         /**
          * @brief Get the temperature value.

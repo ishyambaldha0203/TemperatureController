@@ -44,6 +44,8 @@ namespace Internal
 
         // #region ITemperatureSimulator Implementation
 
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) override;
+
         virtual float GetTemperature() const override;
 
         virtual void Start(float startingTemperature) override;
@@ -74,6 +76,11 @@ namespace Internal
          * @brief To keep alive the and running simulator in background.
          */
         std::future<void> _simulatorFuture;
+
+        /**
+         * @brief Store the simulation intensity provided by the manager.
+         */
+        float _simulationIntensity;
     };
 } // namespace Internal
 END_TEMPERATURE_CONTROLLER_NS

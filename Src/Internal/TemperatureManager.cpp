@@ -80,6 +80,8 @@ namespace Internal
 
         _displayManager->Initialize(*systemConfig.get());
 
+        _temperatureSimulator->Initialize(*systemConfig.get());
+
         // Register with temperature sensor.
         _temperatureSensor->RegisterObservers([this](float temperature)
                                               {

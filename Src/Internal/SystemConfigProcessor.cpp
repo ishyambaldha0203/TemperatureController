@@ -26,8 +26,13 @@ namespace
 {
     namespace Default
     {
-        constexpr const float MinTemperature = 20;
-        constexpr const float MaxTemperature = 24;
+        constexpr const float MinTemperature = 20.0f;            ///< Min temperature to start heater.
+        constexpr const float MaxTemperature = 21.0f;            ///< Max temperature to start cooler.
+        constexpr const float CoolingIntensity = 0.10f;          ///< Temperature lowered by heater per simulation cycle.
+        constexpr const float HeatingIntensity = 0.10f;          ///< Temperature raised by heater per simulation cycle.
+        constexpr const float SimulationIntensity = 0.5f;        ///< Used by simulator to generate random temperature between -0.5f to +0.5f.
+        constexpr const uint32_t SimulationTimeCycleSeconds = 1; ///< Timing to be used bu simulator to update temperature.
+        constexpr const uint32_t SensorTimeCycleSeconds = 1;     ///< Timing to be used by sensor to read the temperature.
     }
 }
 
@@ -73,6 +78,9 @@ namespace Internal
         // Set default config value.
         systemConfigMutable->SetMinTemperatureRange(Default::MinTemperature);
         systemConfigMutable->SetMaxTemperatureRange(Default::MaxTemperature);
+        systemConfigMutable->SetCoolingIntensity(Default::CoolingIntensity);
+        systemConfigMutable->SetHeatingIntensity(Default::HeatingIntensity);
+        systemConfigMutable->SetSimulationIntensity(Default::SimulationIntensity);
 
         return systemConfig;
 

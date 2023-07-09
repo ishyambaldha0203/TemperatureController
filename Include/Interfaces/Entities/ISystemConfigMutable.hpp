@@ -36,6 +36,27 @@ namespace EntityInterfaces
          * @return const float
          */
         virtual void SetMaxTemperatureRange(float temperature) noexcept = 0;
+
+        /**
+         * @brief Set the cooling intensity.
+         *
+         * @return const float
+         */
+        virtual void SetCoolingIntensity(float intensity) noexcept = 0;
+
+        /**
+         * @brief Set the heating intensity.
+         *
+         * @return const float
+         */
+        virtual void SetHeatingIntensity(float intensity) noexcept = 0;
+
+        /**
+         * @brief Set the intensity to be used by temperature simulator.
+         *
+         * @return const float
+         */
+        virtual void SetSimulationIntensity(float intensity) noexcept = 0;
     };
 } // namespace EntityInterfaces
 END_TEMPERATURE_CONTROLLER_NS

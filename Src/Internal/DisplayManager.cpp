@@ -7,6 +7,8 @@
 
 #include "Internal/DisplayManager.hpp"
 
+#include <sstream>
+
 #include "Exceptions/XBaseException.hpp"
 
 // #region Namespace Symbols
@@ -37,6 +39,9 @@ namespace Internal
         std::string colorEnd = "\033[0m";
         std::string degreeCelsius = "°C";
 
+        std::stringstream streamTemperatureRange;
+        streamTemperatureRange << "[" << _minTemperature << "-" << _maxTemperature << "] ";
+
         if (temperature < _minTemperature)
         {
             color = "34m"; // Blue
@@ -51,7 +56,7 @@ namespace Internal
         }
 
         std::string temperatureString =
-            std::string("\rTemperature: ") + colorStart + color + std::to_string(static_cast<int>(temperature)) + colorEnd;
+            std::string("\rRoom Temperature: ") + streamTemperatureRange.str() + colorStart + color + std::to_string(static_cast<int>(temperature)) + colorEnd;
 
         PopulateText(temperatureString + degreeCelsius);
     }

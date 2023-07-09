@@ -50,6 +50,21 @@ namespace Entities
             return _maxTemperature;
         }
 
+        float GetHeatingIntensity() const noexcept override
+        {
+            return _heatingIntensity;
+        }
+
+        float GetCoolingIntensity() const noexcept override
+        {
+            return _coolingIntensity;
+        }
+
+        float GetSimulationIntensity() const noexcept override
+        {
+            return _simulationIntensity;
+        }
+
         // #endregion
 
         // #region ISystemConfigMutable Implementation
@@ -64,6 +79,20 @@ namespace Entities
             _maxTemperature = temperature;
         }
 
+        void SetCoolingIntensity(float intensity) noexcept override
+        {
+            _coolingIntensity = intensity;
+        }
+
+        void SetHeatingIntensity(float intensity) noexcept override
+        {
+            _heatingIntensity = intensity;
+        }
+
+        void SetSimulationIntensity(float intensity) noexcept override
+        {
+            _simulationIntensity = intensity;
+        }
         // #endregion
 
     private:
@@ -80,6 +109,21 @@ namespace Entities
          * @brief Store maximum temperature to maintain for value.
          */
         float _maxTemperature;
+
+        /**
+         * @brief Store heating intensity value.
+         */
+        float _heatingIntensity;
+
+        /**
+         * @brief Store cooling intensity value.
+         */
+        float _coolingIntensity;
+
+        /**
+         * @brief Store intensity value to be used by simulator.
+         */
+        float _simulationIntensity;
 
         // #endregion
     };

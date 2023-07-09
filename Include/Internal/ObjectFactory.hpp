@@ -94,6 +94,11 @@ namespace Internal
         std::shared_ptr<EntityInterfaces::ISystemConfig> _systemConfig;
 
         /**
+         * @brief To create singleton instance of display manager.
+         */
+        std::shared_ptr<Interfaces::IDisplayManager> _displayManager;
+
+        /**
          * @brief To create singleton instance of temperature simulator.
          */
         std::shared_ptr<Interfaces::ITemperatureSimulator> _temperatureSimulator;

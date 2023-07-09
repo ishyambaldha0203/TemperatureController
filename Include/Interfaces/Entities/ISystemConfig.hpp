@@ -34,6 +34,27 @@ namespace EntityInterfaces
          * @return Maximum temperature.
          */
         virtual float GetMaxTemperatureRange() const noexcept = 0;
+
+        /**
+         * @brief Get the read-only heating intensity owned by this entity.
+         *
+         * @return Heating intensity.
+         */
+        virtual float GetHeatingIntensity() const noexcept = 0;
+
+        /**
+         * @brief Get the read-only heating intensity owned by this entity.
+         *
+         * @return Heating intensity.
+         */
+        virtual float GetCoolingIntensity() const noexcept = 0;
+
+        /**
+         * @brief Get the read-only simulation intensity owned by this entity.
+         *
+         * @return Simulation intensity.
+         */
+        virtual float GetSimulationIntensity() const noexcept = 0;
     };
 } // namespace EntityInterfaces
 END_TEMPERATURE_CONTROLLER_NS
