@@ -14,6 +14,7 @@
 #include "Internal/Heater.hpp"
 #include "Internal/Program.hpp"
 #include "Internal/SystemConfigProcessor.hpp"
+#include "Internal/SystemConfigReader.hpp"
 #include "Internal/TemperatureController.hpp"
 #include "Internal/TemperatureManager.hpp"
 #include "Internal/TemperatureSensor.hpp"
@@ -61,7 +62,15 @@ namespace Internal
 
     void ObjectFactory::Create(ISystemConfigProcessorFactory::InterfaceSharedPointer &objectPtr)
     {
-        objectPtr = std::make_shared<SystemConfigProcessor>(Self());
+        ISystemConfigReaderFactory::InterfaceSharedPointer systemConfigReader;
+        Create(systemConfigReader);
+
+        objectPtr = std::make_shared<SystemConfigProcessor>(systemConfigReader, Self());
+    }
+
+    void ObjectFactory::Create(ISystemConfigReaderFactory::InterfaceSharedPointer &objectPtr)
+    {
+        objectPtr = std::make_shared<SystemConfigReader>();
     }
 
     void ObjectFactory::Create(ITemperatureControllerFactory::InterfaceSharedPointer &objectPtr)

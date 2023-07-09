@@ -9,6 +9,9 @@
 
 #include "Internal/SystemConfigProcessor.hpp"
 
+#include <fstream>
+#include <unordered_map>
+
 #include "Interfaces/Entities/ISystemConfigMutable.hpp"
 
 #include "Exceptions/XArgumentNull.hpp"
@@ -33,6 +36,13 @@ namespace
         constexpr const float SimulationIntensity = 0.5f;        ///< Used by simulator to generate random temperature between -0.5f to +0.5f.
         constexpr const uint32_t SimulationTimeCycleSeconds = 1; ///< Timing to be used bu simulator to update temperature.
         constexpr const uint32_t SensorTimeCycleSeconds = 1;     ///< Timing to be used by sensor to read the temperature.
+        constexpr const char *ConfigFilePath = "config.txt";
+    }
+
+    namespace DataKeys
+    {
+        constexpr const char *MinimumTemperature = "MinimumTemperature";
+        constexpr const char *MaximumTemperature = "MaximumTemperature";
     }
 }
 
@@ -41,9 +51,16 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    SystemConfigProcessor::SystemConfigProcessor(std::shared_ptr<ISystemConfigFactory> configFactory)
-        : _configFactory(configFactory)
+    SystemConfigProcessor::SystemConfigProcessor(std::shared_ptr<ISystemConfigReader> configReader,
+                                                 std::shared_ptr<ISystemConfigFactory> configFactory)
+        : _configReader(configReader),
+          _configFactory(configFactory)
     {
+        if (nullptr == _configReader)
+        {
+            throw XArgumentNull("SystemConfigProcessor::configFactory");
+        }
+
         if (nullptr == _configFactory)
         {
             throw XArgumentNull("SystemConfigProcessor::configFactory");
@@ -56,16 +73,9 @@ namespace Internal
 
     // #region Public Methods
 
-    std::shared_ptr<ISystemConfig> SystemConfigProcessor::PrepareConfig(const std::string &input)
+    std::shared_ptr<ISystemConfig> SystemConfigProcessor::PrepareConfig()
     {
-        if (input.empty())
-        {
-            throw XInvalidArgument("SystemConfigProcessor::PrepareConfig::input is empty string.");
-        }
-
-        // TODO: Validate input, including data format.
-
-        // TODO: De-serialize input data.
+        ISystemConfigReader::ConfigurationMap configMap = _configReader->ReadConfig(Default::ConfigFilePath);
 
         // Create the instance of system config.
         std::shared_ptr<ISystemConfig> systemConfig;
@@ -82,9 +92,25 @@ namespace Internal
         systemConfigMutable->SetHeatingIntensity(Default::HeatingIntensity);
         systemConfigMutable->SetSimulationIntensity(Default::SimulationIntensity);
 
-        return systemConfig;
+        for (auto &[key, value] : configMap)
+        {
+            if (key == "MinimumTemperature")
+            {
+                systemConfigMutable->SetMinTemperatureRange(std::stof(value));
+            }
+            else if (key == "MaximumTemperature")
+            {
+                systemConfigMutable->SetMaxTemperatureRange(std::stof(value));
+            }
+            else
+            {
+                std::cerr << "[Error] Unexpected config key: " << key << std::endl;
+            }
+        }
 
-        // #endregion
+        return systemConfig;
     }
+
+    // #endregion
 } // namespace Internal
 END_TEMPERATURE_CONTROLLER_NS

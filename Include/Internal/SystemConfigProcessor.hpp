@@ -10,6 +10,7 @@
 #include "CommonConfig.hpp"
 
 #include "Interfaces/ISystemConfigProcessor.hpp"
+#include "Interfaces/ISystemConfigReader.hpp"
 #include "Interfaces/Factories/IObjectFactories.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
@@ -28,11 +29,13 @@ namespace Internal
         /**
          * @brief Construct a new system config processor object.
          *
+         * @param[in] configReader To read the configuration from file.
          * @param[in] configFactory A factory to create system config data entity from provided input payload.
          *
          * @throw XArgumentNull If input params are null.
          */
-        SystemConfigProcessor(std::shared_ptr<FactoryInterfaces::ISystemConfigFactory> configFactory);
+        SystemConfigProcessor(std::shared_ptr<Interfaces::ISystemConfigReader> configReader,
+                              std::shared_ptr<FactoryInterfaces::ISystemConfigFactory> configFactory);
 
         /**
          * @brief Destroy the system config processor object.
@@ -43,7 +46,7 @@ namespace Internal
 
         // #region ISystemConfigProcessor Implementation
 
-        virtual std::shared_ptr<EntityInterfaces::ISystemConfig> PrepareConfig(const std::string &input) override;
+        virtual std::shared_ptr<EntityInterfaces::ISystemConfig> PrepareConfig() override;
 
         // #endregion
 
@@ -51,6 +54,11 @@ namespace Internal
         DECLARE_NON_COPYABLE_CLASS(SystemConfigProcessor)
 
         // #region Private Members
+
+        /**
+         * @brief To read the system configuration from file.
+         */
+        std::shared_ptr<Interfaces::ISystemConfigReader> _configReader;
 
         /**
          * @brief Factory to create system config data entity after deserialization of input data.

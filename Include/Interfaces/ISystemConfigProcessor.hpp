@@ -35,7 +35,7 @@ namespace Interfaces
          *
          * @throw XInvalidArgument If input is empty.
          */
-        virtual std::shared_ptr<EntityInterfaces::ISystemConfig> PrepareConfig(const std::string &input) = 0;
+        virtual std::shared_ptr<EntityInterfaces::ISystemConfig> PrepareConfig() = 0;
     };
 } // namespace Interfaces
 END_TEMPERATURE_CONTROLLER_NS

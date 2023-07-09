@@ -73,8 +73,7 @@ namespace Internal
         // TODO: Fetch the system level configuration provided by user as an input data.
 
         // Process the input params to prepare test config data entity.
-        std::shared_ptr<ISystemConfig> systemConfig =
-            _systemConfigProcessor->PrepareConfig("Just a placeholder to not fail on param validation");
+        std::shared_ptr<ISystemConfig> systemConfig = _systemConfigProcessor->PrepareConfig();
 
         _temperatureController->Initialize(*systemConfig.get());
 

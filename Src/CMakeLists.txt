@@ -15,6 +15,7 @@ target_sources(${TEMPERATURE_CONTROLLER_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/Internal/ObjectFactory.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/Program.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/SystemConfigProcessor.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Internal/SystemConfigReader.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/TemperatureController.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/TemperatureManager.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Internal/TemperatureSensor.cpp

@@ -15,6 +15,7 @@
 #include "Interfaces/IDisplayManager.hpp"
 #include "Interfaces/IProgram.hpp"
 #include "Interfaces/ISystemConfigProcessor.hpp"
+#include "Interfaces/ISystemConfigReader.hpp"
 #include "Interfaces/ITemperatureController.hpp"
 #include "Interfaces/ITemperatureManager.hpp"
 #include "Interfaces/ITemperatureSensor.hpp"
@@ -41,6 +42,13 @@ namespace FactoryInterfaces
      * @brief Factory interface for concrete classes that implements @ref ISystemConfigProcessor.
      */
     using ISystemConfigProcessorFactory = IGenericObjectFactoryT<Interfaces::ISystemConfigProcessor>;
+
+    /**
+     * @interface ISystemConfigReaderFactory
+     *
+     * @brief Factory interface for concrete classes that implements @ref ISystemConfigReader.
+     */
+    using ISystemConfigReaderFactory = IGenericObjectFactoryT<Interfaces::ISystemConfigReader>;
 
     /**
      * @interface ITemperatureControllerFactory

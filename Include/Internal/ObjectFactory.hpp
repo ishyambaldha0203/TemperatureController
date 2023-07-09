@@ -24,6 +24,7 @@ namespace Internal
                           public FactoryInterfaces::IDisplayManagerFactory,
                           public FactoryInterfaces::IProgramFactory,
                           public FactoryInterfaces::ISystemConfigProcessorFactory,
+                          public FactoryInterfaces::ISystemConfigReaderFactory,
                           public FactoryInterfaces::ITemperatureControllerFactory,
                           public FactoryInterfaces::ITemperatureManagerFactory,
                           public FactoryInterfaces::ITemperatureSensorFactory,
@@ -38,6 +39,7 @@ namespace Internal
         using DisplayManagerFactoryInterfacePtr = FactoryInterfaces::IDisplayManagerFactory::InterfaceSharedPointer;
         using ProgramFactoryInterfacePtr = FactoryInterfaces::IProgramFactory::InterfaceSharedPointer;
         using ISystemConfigProcessorFactoryInterfacePtr = FactoryInterfaces::ISystemConfigProcessorFactory::InterfaceSharedPointer;
+        using ISystemConfigReaderFactoryInterfacePtr = FactoryInterfaces::ISystemConfigReaderFactory::InterfaceSharedPointer;
         using TemperatureControllerFactoryInterfacePtr = FactoryInterfaces::ITemperatureControllerFactory::InterfaceSharedPointer;
         using TemperatureManagerFactoryInterfacePtr = FactoryInterfaces::ITemperatureManagerFactory::InterfaceSharedPointer;
         using TemperatureSensorFactoryInterfacePtr = FactoryInterfaces::ITemperatureSensorFactory::InterfaceSharedPointer;
@@ -67,6 +69,7 @@ namespace Internal
         virtual void Create(DisplayManagerFactoryInterfacePtr &objectPtr) override;
         virtual void Create(ProgramFactoryInterfacePtr &objectPtr) override;
         virtual void Create(ISystemConfigProcessorFactoryInterfacePtr &objectPtr) override;
+        virtual void Create(ISystemConfigReaderFactoryInterfacePtr &objectPtr) override;
         virtual void Create(TemperatureControllerFactoryInterfacePtr &objectPtr) override;
         virtual void Create(TemperatureManagerFactoryInterfacePtr &objectPtr) override;
         virtual void Create(TemperatureSensorFactoryInterfacePtr &objectPtr) override;
