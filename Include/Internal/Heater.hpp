@@ -10,7 +10,7 @@
 #include "CommonConfig.hpp"
 
 #include "Interfaces/IAppliance.hpp"
-#include "Interfaces/Entities/ISystemConfig.hpp"
+#include "Interfaces/Entities/IApplianceConfig.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
@@ -27,8 +27,10 @@ namespace Internal
 
         /**
          * @brief Construct a new Heater object.
+         * 
+         * @param applianceConfig 
          */
-        Heater(std::shared_ptr<EntityInterfaces::ISystemConfig> systemConfig);
+        Heater(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig);
 
         /**
          * @brief Destroy the heater object.
@@ -53,7 +55,7 @@ namespace Internal
         /**
          * @brief To set cooling intensity with system level configuration.
          */
-        std::shared_ptr<EntityInterfaces::ISystemConfig> _systemConfig;
+        std::shared_ptr<EntityInterfaces::IApplianceConfig> _applianceConfig;
 
         /**
          * @brief Cooler running status.

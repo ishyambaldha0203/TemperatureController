@@ -9,7 +9,7 @@
 
 #include "CommonConfig.hpp"
 
-#include "Interfaces/Entities/ISystemConfig.hpp"
+#include "Interfaces/Entities/ISystemConfigMutable.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Entities
@@ -19,9 +19,9 @@ namespace Entities
      *
      * @brief Represents all system level the configuration.
      *
-     * @note This entity should grow in elements as per the requirement.
+     * @note This entity allows to grow in elements as per the requirement.
      */
-    class SystemConfig : public EntityInterfaces::ISystemConfig 
+    class SystemConfig : public EntityInterfaces::ISystemConfigMutable
     {
     public:
         // #region Construction/Destruction
@@ -40,24 +40,28 @@ namespace Entities
 
         // #region ISystemConfig Implementation
 
-        float GetHeatingIntensity() const noexcept override
+        float GetMinTemperatureRange() const noexcept override
         {
-            return _heatingIntensity;
+            return _minTemperature;
         }
 
-        float GetCoolingIntensity() const noexcept override
+        float GetMaxTemperatureRange() const noexcept override
         {
-            return _coolingIntensity;
+            return _maxTemperature;
         }
 
-        void SetCoolingIntensity(float intensity) noexcept override
+        // #endregion
+
+        // #region ISystemConfigMutable Implementation
+
+        void SetMinTemperatureRange(float temperature) noexcept override
         {
-            _coolingIntensity = intensity;
+            _minTemperature = temperature;
         }
 
-        void SetHeatingIntensity(float intensity) noexcept override
+        void SetMaxTemperatureRange(float temperature) noexcept override
         {
-            _heatingIntensity = intensity;
+            _maxTemperature = temperature;
         }
 
         // #endregion
@@ -68,14 +72,14 @@ namespace Entities
         // #region Internal Data Members
 
         /**
-         * @brief Store heating intensity value.
+         * @brief Store minimum temperature to maintain for value.
          */
-        float _heatingIntensity;
+        float _minTemperature;
 
         /**
-         * @brief Store cooling intensity value.
+         * @brief Store maximum temperature to maintain for value.
          */
-        float _coolingIntensity;
+        float _maxTemperature;
 
         // #endregion
     };

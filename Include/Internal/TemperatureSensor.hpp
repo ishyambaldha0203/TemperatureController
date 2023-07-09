@@ -30,6 +30,8 @@ namespace Internal
 
         /**
          * @brief Construct a new temperature manager object.
+         * 
+         * @param temperatureSimulator 
          */
         TemperatureSensor(std::shared_ptr<Interfaces::ITemperatureSimulator> temperatureSimulator);
 

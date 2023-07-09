@@ -9,10 +9,9 @@
 
 #include "CommonConfig.hpp"
 
-#include <atomic>
-
-#include "Interfaces/IAppliance.hpp"
 #include "Interfaces/IDisplayManager.hpp"
+#include "Interfaces/ISystemConfigProcessor.hpp"
+#include "Interfaces/ITemperatureController.hpp"
 #include "Interfaces/ITemperatureSensor.hpp"
 #include "Interfaces/ITemperatureSimulator.hpp"
 #include "Interfaces/ITemperatureManager.hpp"
@@ -31,12 +30,20 @@ namespace Internal
         // #region Construction/Destruction
 
         /**
-         * @brief Construct a new temperature manager object.
+         * @brief  Construct a new temperature manager object.
+         * 
+         * It is the main manager class of the application.
+         * 
+         * @param systemConfigProcessor 
+         * @param temperatureSensor 
+         * @param temperatureSimulator 
+         * @param temperatureController 
+         * @param displayManager 
          */
-        TemperatureManager(std::shared_ptr<Interfaces::ITemperatureSensor> temperatureSensor,
+        TemperatureManager(std::shared_ptr<Interfaces::ISystemConfigProcessor> systemConfigProcessor,
+                           std::shared_ptr<Interfaces::ITemperatureSensor> temperatureSensor,
                            std::shared_ptr<Interfaces::ITemperatureSimulator> temperatureSimulator,
-                           std::shared_ptr<Interfaces::IAppliance> cooler,
-                           std::shared_ptr<Interfaces::IAppliance> heater,
+                           std::shared_ptr<Interfaces::ITemperatureController> temperatureController,
                            std::shared_ptr<Interfaces::IDisplayManager> displayManager);
 
         /**
@@ -58,7 +65,12 @@ namespace Internal
         // #region Private Members
 
         /**
-         * @brief temperature sensor to get registered for temperature change events.
+         * @brief To process and prepare data entity from user provided system level configuration.
+         */
+        std::shared_ptr<Interfaces::ISystemConfigProcessor> _systemConfigProcessor;
+
+        /**
+         * @brief A temperature sensor to get registered for temperature change events.
          */
         std::shared_ptr<Interfaces::ITemperatureSensor> _temperatureSensor;
 
@@ -68,52 +80,18 @@ namespace Internal
         std::shared_ptr<Interfaces::ITemperatureSimulator> _temperatureSimulator;
 
         /**
-         * @brief To reduce the temperature in case is goes out of upper range.
+         * @brief To regulate the temperature in a configured range.
          */
-        std::shared_ptr<Interfaces::IAppliance> _cooler;
-
-        /**
-         * @brief To increase the temperature if it goes out of lower range.
-         */
-        std::shared_ptr<Interfaces::IAppliance> _heater;
+        std::shared_ptr<Interfaces::ITemperatureController> _temperatureController;
 
         /**
          * @brief The display manager to display temperature.
          */
         std::shared_ptr<Interfaces::IDisplayManager> _displayManager;
 
-        /**
-         * @brief A temperature to start with for simulator.
-         */
-        float _startingTemperature;
-
-        /**
-         * @brief Minimum temperature to monitor for.
-         */
-        float _minTemperature;
-
-        /**
-         * @brief Maximum temperature to monitor for.
-         */
-        float _maxTemperature;
-
         // #endregion
 
         // #region Private Methods
-
-        /**
-         * @brief Controls the temperature based on range.
-         *
-         * @param temperature A current temperature.
-         */
-        void ControlTemperature(float temperature);
-
-        /**
-         * @brief Display the current temperature with added colors.
-         *
-         * @param temperature A current temperature.
-         */
-        void DisplayTemperature(float temperature);
 
         /**
          * @brief Get called every time on temperature change event.

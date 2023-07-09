@@ -17,7 +17,7 @@ namespace Internal
     /**
      * @class DisplayManager
      *
-     * @brief Concrete implementation of temperature manager.
+     * @brief Concrete implementation of display manager.
      */
     class DisplayManager : public Interfaces::IDisplayManager
     {
@@ -25,12 +25,12 @@ namespace Internal
         // #region Construction/Destruction
 
         /**
-         * @brief Construct a new temperature manager object.
+         * @brief Construct a new display manager object.
          */
         DisplayManager();
 
         /**
-         * @brief Destroy the temperature manager object.
+         * @brief Destroy the display manager object.
          */
         virtual ~DisplayManager() override;
 
@@ -38,12 +38,26 @@ namespace Internal
 
         // #region IDisplayManager Implementation
 
-        virtual void PopulateText(const std::string& data) override;
+        virtual void DisplayTemperature(float temperature) override;
+
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) override;
+
+        virtual void PopulateText(const std::string &data) override;
 
         // #endregion
 
     private:
         DECLARE_NON_COPYABLE_CLASS(DisplayManager)
+
+        /**
+         * @brief Minimum temperature to check for.
+         */
+        float _minTemperature;
+
+        /**
+         * @brief Maximum temperature to check for.
+         */
+        float _maxTemperature;
     };
 } // namespace Internal
 END_TEMPERATURE_CONTROLLER_NS

@@ -9,6 +9,8 @@
 
 #include "CommonConfig.hpp"
 
+#include "Interfaces/Entities/ISystemConfig.hpp"
+
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Interfaces
 {
@@ -20,6 +22,20 @@ namespace Interfaces
     interface IDisplayManager
     {
         DECLARE_INTERFACE_DEFAULTS(IDisplayManager)
+
+        /**
+         * @brief To display the temperature with colored text based on temperature range.
+         *
+         * @param temperature Current temperature.
+         */
+        virtual void DisplayTemperature(float temperature) = 0;
+
+        /**
+         * @brief Initialize the display to set the config parameters.
+         *
+         * @param systemConfig entity that contains system level configurations.
+         */
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) = 0;
 
         /**
          * @brief Populate the text data on display.

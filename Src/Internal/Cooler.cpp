@@ -7,6 +7,8 @@
 
 #include "Internal/Cooler.hpp"
 
+#include "Interfaces/Entities/IApplianceConfigMutable.hpp"
+
 #include "Exceptions/XArgumentNull.hpp"
 
 // #region Namespace Symbols
@@ -22,13 +24,13 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    Cooler::Cooler(std::shared_ptr<ISystemConfig> systemConfig)
-        : _systemConfig(systemConfig),
+    Cooler::Cooler(std::shared_ptr<IApplianceConfig> applianceConfig)
+        : _applianceConfig(applianceConfig),
           _isRunning(false)
     {
-        if (nullptr == systemConfig)
+        if (nullptr == applianceConfig)
         {
-            throw XArgumentNull("Cooler::systemConfig");
+            throw XArgumentNull("Cooler::applianceConfig");
         }
     }
 
@@ -40,18 +42,26 @@ namespace Internal
 
     void Cooler::Start()
     {
-        std::cout << "\nCooler started...\n" << std::endl;
+        std::cout << "\nCooler started...\n"
+                  << std::endl;
 
-        _systemConfig->SetCoolingIntensity(0.25f);
+        std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
+            std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);
+
+        applianceConfigMutable->SetCoolingIntensity(0.25f);
 
         _isRunning = true;
     }
 
     void Cooler::Stop()
     {
-        std::cout << "\nCooler stopped...\n" << std::endl;
+        std::cout << "\nCooler stopped...\n"
+                  << std::endl;
 
-        _systemConfig->SetCoolingIntensity(0.0f);
+        std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
+            std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);
+
+        applianceConfigMutable->SetCoolingIntensity(0.0f);
 
         _isRunning = false;
     }

@@ -14,10 +14,13 @@
 
 #include "Interfaces/IDisplayManager.hpp"
 #include "Interfaces/IProgram.hpp"
+#include "Interfaces/ISystemConfigProcessor.hpp"
+#include "Interfaces/ITemperatureController.hpp"
 #include "Interfaces/ITemperatureManager.hpp"
 #include "Interfaces/ITemperatureSensor.hpp"
 #include "Interfaces/ITemperatureSimulator.hpp"
 
+#include "Interfaces/Entities/IApplianceConfig.hpp"
 #include "Interfaces/Entities/ISystemConfig.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
@@ -31,6 +34,20 @@ namespace FactoryInterfaces
      * @brief Factory interface for concrete classes that implements @ref IProgram.
      */
     using IProgramFactory = IGenericObjectFactoryT<Interfaces::IProgram>;
+
+    /**
+     * @interface ISystemConfigProcessorFactory
+     *
+     * @brief Factory interface for concrete classes that implements @ref ISystemConfigProcessor.
+     */
+    using ISystemConfigProcessorFactory = IGenericObjectFactoryT<Interfaces::ISystemConfigProcessor>;
+
+    /**
+     * @interface ITemperatureControllerFactory
+     *
+     * @brief Factory interface for concrete classes that implements @ref ITemperatureController.
+     */
+    using ITemperatureControllerFactory = IGenericObjectFactoryT<Interfaces::ITemperatureController>;
 
     /**
      * @interface ITemperatureManagerFactory
@@ -59,6 +76,13 @@ namespace FactoryInterfaces
      * @brief Factory interface for concrete classes that implements @ref ITemperatureSimulator.
      */
     using ITemperatureSimulatorFactory = IGenericObjectFactoryT<Interfaces::ITemperatureSimulator>;
+
+    /**
+     * @interface IApplianceConfigFactory
+     *
+     * @brief Factory interface for concrete classes that implements @ref IApplianceConfig.
+     */
+    using IApplianceConfigFactory = IGenericObjectFactoryT<EntityInterfaces::IApplianceConfig>;
 
     /**
      * @interface ISystemConfigFactory

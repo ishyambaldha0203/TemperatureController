@@ -3,7 +3,7 @@
  *
  * @brief Concrete implementation of a common object factory.
  *
- * It manages creation and lifespan of all the higher level object of the Temperature Monitoring application.
+ * It manages creation and lifespan of all the higher level object of the Temperature Controller application.
  *
  *************************************************************************************************/
 
@@ -13,9 +13,12 @@
 #include "Internal/DisplayManager.hpp"
 #include "Internal/Heater.hpp"
 #include "Internal/Program.hpp"
+#include "Internal/SystemConfigProcessor.hpp"
+#include "Internal/TemperatureController.hpp"
 #include "Internal/TemperatureManager.hpp"
 #include "Internal/TemperatureSensor.hpp"
 #include "Internal/TemperatureSimulator.hpp"
+#include "Internal/Entities/ApplianceConfig.hpp"
 #include "Internal/Entities/SystemConfig.hpp"
 
 // #region Namespace Symbols
@@ -51,24 +54,44 @@ namespace Internal
         objectPtr = std::make_shared<Program>(temperatureManager);
     }
 
-    void ObjectFactory::Create(ITemperatureManagerFactory::InterfaceSharedPointer &objectPtr)
+    void ObjectFactory::Create(ISystemConfigProcessorFactory::InterfaceSharedPointer &objectPtr)
     {
-        ITemperatureSensorFactory::InterfaceSharedPointer temperatureSensor;
-        Create(temperatureSensor);
+        objectPtr = std::make_shared<SystemConfigProcessor>(Self());
+    }
 
-        ITemperatureSimulatorFactory::InterfaceSharedPointer temperatureSimulator;
-        Create(temperatureSimulator);
-
+    void ObjectFactory::Create(ITemperatureControllerFactory::InterfaceSharedPointer &objectPtr)
+    {
         IApplianceFactory::InterfaceSharedPointer cooler;
         CreateCooler(cooler);
 
         IApplianceFactory::InterfaceSharedPointer heater;
         CreateHeater(heater);
 
+        objectPtr = std::make_shared<TemperatureController>(cooler, heater);
+    }
+
+    void ObjectFactory::Create(ITemperatureManagerFactory::InterfaceSharedPointer &objectPtr)
+    {
+        ISystemConfigProcessorFactory::InterfaceSharedPointer systemConfigProcessor;
+        Create(systemConfigProcessor);
+
+        ITemperatureSensorFactory::InterfaceSharedPointer temperatureSensor;
+        Create(temperatureSensor);
+
+        ITemperatureSimulatorFactory::InterfaceSharedPointer temperatureSimulator;
+        Create(temperatureSimulator);
+
+        ITemperatureControllerFactory::InterfaceSharedPointer temperatureController;
+        Create(temperatureController);
+
         IDisplayManagerFactory::InterfaceSharedPointer displayManager;
         Create(displayManager);
 
-        objectPtr = std::make_shared<TemperatureManager>(temperatureSensor, temperatureSimulator, cooler, heater, displayManager);
+        objectPtr = std::make_shared<TemperatureManager>(systemConfigProcessor,
+                                                         temperatureSensor,
+                                                         temperatureSimulator,
+                                                         temperatureController,
+                                                         displayManager);
     }
 
     void ObjectFactory::Create(ITemperatureSensorFactory::InterfaceSharedPointer &objectPtr)
@@ -83,13 +106,23 @@ namespace Internal
     {
         if (nullptr == _temperatureSimulator)
         {
-            ISystemConfigFactory::InterfaceSharedPointer systemConfig;
-            Create(systemConfig);
+            IApplianceConfigFactory::InterfaceSharedPointer applianceConfig;
+            Create(applianceConfig);
 
-            _temperatureSimulator = std::make_shared<TemperatureSimulator>(systemConfig);
+            _temperatureSimulator = std::make_shared<TemperatureSimulator>(applianceConfig);
         }
 
         objectPtr = _temperatureSimulator;
+    }
+
+    void ObjectFactory::Create(IApplianceConfigFactory::InterfaceSharedPointer &objectPtr)
+    {
+        if (nullptr == _applianceConfig)
+        {
+            _applianceConfig = std::make_shared<ApplianceConfig>();
+        }
+
+        objectPtr = _applianceConfig;
     }
 
     void ObjectFactory::Create(ISystemConfigFactory::InterfaceSharedPointer &objectPtr)
@@ -104,18 +137,18 @@ namespace Internal
 
     void ObjectFactory::CreateCooler(IApplianceFactory::InterfaceSharedPointer &objectPtr)
     {
-        ISystemConfigFactory::InterfaceSharedPointer systemConfig;
-        Create(systemConfig);
+        IApplianceConfigFactory::InterfaceSharedPointer applianceConfig;
+        Create(applianceConfig);
 
-        objectPtr = std::make_shared<Cooler>(systemConfig);
+        objectPtr = std::make_shared<Cooler>(applianceConfig);
     }
 
     void ObjectFactory::CreateHeater(IApplianceFactory::InterfaceSharedPointer &objectPtr)
     {
-        ISystemConfigFactory::InterfaceSharedPointer systemConfig;
-        Create(systemConfig);
+        IApplianceConfigFactory::InterfaceSharedPointer applianceConfig;
+        Create(applianceConfig);
 
-        objectPtr = std::make_shared<Heater>(systemConfig);
+        objectPtr = std::make_shared<Heater>(applianceConfig);
     }
 
     // #endregion

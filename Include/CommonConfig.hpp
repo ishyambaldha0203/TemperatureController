@@ -11,7 +11,7 @@
 #include <memory>
 
 /**
- * @brief Begins the C++ namespace for Temperature Monitor application.
+ * @brief Begins the C++ namespace for Temperature Monitoring and Controlling application.
  *
  * @note It must be closed by the #END_TEMPERATURE_CONTROLLER_NS macro.
  *
@@ -32,7 +32,7 @@
     }
 
 /**
- * @brief Defines the fully-qualified Temperature Monitor C++ namespace.
+ * @brief Defines the fully-qualified Temperature Controller C++ namespace.
  *
  * Use this macro to reference the namespace in declarations.
  */
@@ -62,7 +62,7 @@ public:                                           \
     virtual ~interfaceName() = default;
 
 /**
- * @brief Convenience macro used to declare constructs to render a class safely uncopyable.
+ * @brief Convenience macro used to declare constructs to render a class safely un-copyable.
  *
  * This macro should be used at the top of the private section in a class declaration. It can also
  * be used to introduce the private section in a class declaration.

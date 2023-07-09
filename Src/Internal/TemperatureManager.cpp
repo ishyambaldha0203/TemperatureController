@@ -15,6 +15,7 @@
 // #region Namespace Symbols
 
 using namespace TEMPERATURE_CONTROLLER_NS::Exceptions;
+using namespace TEMPERATURE_CONTROLLER_NS::EntityInterfaces;
 using namespace TEMPERATURE_CONTROLLER_NS::Interfaces;
 
 // #endregion
@@ -24,17 +25,22 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    TemperatureManager::TemperatureManager(std::shared_ptr<ITemperatureSensor> temperatureSensor,
+    TemperatureManager::TemperatureManager(std::shared_ptr<ISystemConfigProcessor> systemConfigProcessor,
+                                           std::shared_ptr<ITemperatureSensor> temperatureSensor,
                                            std::shared_ptr<ITemperatureSimulator> temperatureSimulator,
-                                           std::shared_ptr<IAppliance> cooler,
-                                           std::shared_ptr<IAppliance> heater,
+                                           std::shared_ptr<ITemperatureController> temperatureController,
                                            std::shared_ptr<IDisplayManager> displayManager)
-        : _temperatureSensor(temperatureSensor),
+        : _systemConfigProcessor(systemConfigProcessor),
+          _temperatureSensor(temperatureSensor),
           _temperatureSimulator(temperatureSimulator),
-          _cooler(cooler),
-          _heater(heater),
+          _temperatureController(temperatureController),
           _displayManager(displayManager)
     {
+        if (nullptr == systemConfigProcessor)
+        {
+            throw XArgumentNull("TemperatureManager::systemConfigProcessor");
+        }
+
         if (nullptr == temperatureSensor)
         {
             throw XArgumentNull("TemperatureManager::temperatureSensor");
@@ -45,24 +51,15 @@ namespace Internal
             throw XArgumentNull("TemperatureManager::temperatureSimulator");
         }
 
-        if (nullptr == cooler)
+        if (nullptr == temperatureController)
         {
-            throw XArgumentNull("TemperatureManager::cooler");
-        }
-
-        if (nullptr == heater)
-        {
-            throw XArgumentNull("TemperatureManager::heater");
+            throw XArgumentNull("TemperatureManager::temperatureController");
         }
 
         if (nullptr == displayManager)
         {
             throw XArgumentNull("TemperatureManager::displayManager");
         }
-
-        _minTemperature = 21;
-        _maxTemperature = 23;
-        _startingTemperature = (_minTemperature + _maxTemperature) / 2;
     }
 
     TemperatureManager::~TemperatureManager() = default;
@@ -73,14 +70,27 @@ namespace Internal
 
     void TemperatureManager::Begin()
     {
+        // TODO: Fetch the system level configuration provided by user as an input data.
+
+        // Process the input params to prepare test config data entity.
+        std::shared_ptr<ISystemConfig> systemConfig =
+            _systemConfigProcessor->PrepareConfig("Just a placeholder to not fail on param validation");
+
+        _temperatureController->Initialize(*systemConfig.get());
+
+        _displayManager->Initialize(*systemConfig.get());
+
         // Register with temperature sensor.
         _temperatureSensor->RegisterObservers([this](float temperature)
                                               {
                                                 TemperatureObserverCallback(temperature);
                                               });
 
+        // Get the median of min and max as starting point for simulator.
+        float startingTemperature = (systemConfig->GetMinTemperatureRange() + systemConfig->GetMaxTemperatureRange()) / 2;
+
         // Start temperature simulator.
-        _temperatureSimulator->Start(_startingTemperature);
+        _temperatureSimulator->Start(startingTemperature);
 
         // Start temperature sensor.
         _temperatureSensor->Start();
@@ -96,75 +106,15 @@ namespace Internal
 
     // #region Private Methods
 
-    void TemperatureManager::ControlTemperature(float temperature)
-    {
-        /**
-         * - Start heater if temperature is less then min allowed and only if not running already.
-         * - Start cooler if temperature is greater then max allowed and only if not running already.
-         * - If already in range, stop both heater and cooler.
-         */
-        if (temperature < _minTemperature)
-        {
-            if(!_heater->IsRunning())
-            {
-                _heater->Start();
-            }
-        }
-        else if (temperature > _maxTemperature)
-        {
-            if(!_cooler->IsRunning())
-            {
-                _cooler->Start();
-            }
-        }
-        else
-        {
-            if (_heater->IsRunning())
-            {
-                _heater->Stop();
-            }
-
-            if (_cooler->IsRunning())
-            {
-                _cooler->Stop();
-            }
-        }
-    }
-
-    void TemperatureManager::DisplayTemperature(float temperature)
-    {
-        std::string color;
-        std::string colorStart = "\033[1;";
-        std::string colorEnd = "\033[0m";
-        std::string degreeCelsius = "°C";
-
-        if (temperature < _minTemperature)
-        {
-            color = "34m"; // Blue
-        }
-        else if (temperature > _maxTemperature)
-        {
-            color = "31m"; // Red
-        }
-        else
-        {
-            color = "32m"; // Green
-        }
-
-        std::string temperatureString =
-            std::string("\rTemperature: ") + colorStart + color + std::to_string(static_cast<int>(temperature)) + colorEnd;
-
-        _displayManager->PopulateText(temperatureString + degreeCelsius);
-    }
-
     void TemperatureManager::TemperatureObserverCallback(float temperature)
     {
         std::future<void> future =
             std::async(std::launch::async, [this, temperature]
             {
-                DisplayTemperature(temperature);
+                // TODO: Observer pattern can be used to update all the observers on update events.
+                _displayManager->DisplayTemperature(temperature);
 
-                ControlTemperature(temperature);
+                _temperatureController->RegulateTemperature(temperature);
             });
     }
 

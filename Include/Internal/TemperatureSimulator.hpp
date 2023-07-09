@@ -13,7 +13,7 @@
 #include <future>
 
 #include "Interfaces/ITemperatureSimulator.hpp"
-#include "Interfaces/Entities/ISystemConfig.hpp"
+#include "Interfaces/Entities/IApplianceConfig.hpp"
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
@@ -30,8 +30,10 @@ namespace Internal
 
         /**
          * @brief Construct a new temperature simulator object.
+         * 
+         * @param applianceConfig 
          */
-        TemperatureSimulator(std::shared_ptr<EntityInterfaces::ISystemConfig> systemConfig);
+        TemperatureSimulator(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig);
 
         /**
          * @brief Destroy the temperature simulator object.
@@ -54,9 +56,9 @@ namespace Internal
         DECLARE_NON_COPYABLE_CLASS(TemperatureSimulator)
 
         /**
-         * @brief To access system level configuration data.
+         * @brief To access configuration data of appliances.
          */
-        std::shared_ptr<EntityInterfaces::ISystemConfig> _systemConfig;
+        std::shared_ptr<EntityInterfaces::IApplianceConfig> _applianceConfig;
 
         /**
          * @brief Stop the manual simulation of room temperature.

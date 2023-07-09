@@ -7,6 +7,8 @@
 
 #include "Internal/Heater.hpp"
 
+#include "Interfaces/Entities/IApplianceConfigMutable.hpp"
+
 #include "Exceptions/XArgumentNull.hpp"
 
 // #region Namespace Symbols
@@ -22,13 +24,13 @@ namespace Internal
 {
     // #region Construction/Destruction
 
-    Heater::Heater(std::shared_ptr<ISystemConfig> systemConfig)
-        : _systemConfig(systemConfig),
+    Heater::Heater(std::shared_ptr<IApplianceConfig> applianceConfig)
+        : _applianceConfig(applianceConfig),
           _isRunning(false)
     {
-        if (nullptr == systemConfig)
+        if (nullptr == applianceConfig)
         {
-            throw XArgumentNull("Heater::systemConfig");
+            throw XArgumentNull("Heater::applianceConfig");
         }
     }
 
@@ -40,18 +42,26 @@ namespace Internal
 
     void Heater::Start()
     {
-        std::cout << "\nHeater started...\n" << std::endl;
+        std::cout << "\nHeater started...\n"
+                  << std::endl;
 
-        _systemConfig->SetHeatingIntensity(0.25f);
+        std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
+            std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);
+
+        applianceConfigMutable->SetHeatingIntensity(0.25f);
 
         _isRunning = true;
     }
 
     void Heater::Stop()
     {
-        std::cout << "\nHeater stopped...\n" << std::endl;
+        std::cout << "\nHeater stopped...\n"
+                  << std::endl;
 
-        _systemConfig->SetHeatingIntensity(0.0f);
+        std::shared_ptr<IApplianceConfigMutable> applianceConfigMutable =
+            std::static_pointer_cast<IApplianceConfigMutable>(_applianceConfig);
+
+        applianceConfigMutable->SetHeatingIntensity(0.0f);
 
         _isRunning = false;
     }
