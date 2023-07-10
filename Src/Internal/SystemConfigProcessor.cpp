@@ -15,6 +15,8 @@
 #include "Interfaces/Entities/ISystemConfigMutable.hpp"
 
 #include "Exceptions/XArgumentNull.hpp"
+#include "Exceptions/XConfigError.hpp"
+#include "Exceptions/XFileNotFound.hpp"
 
 // #region Namespace Symbols
 
@@ -75,8 +77,6 @@ namespace Internal
 
     std::shared_ptr<ISystemConfig> SystemConfigProcessor::PrepareConfig()
     {
-        ISystemConfigReader::ConfigurationMap configMap = _configReader->ReadConfig(Default::ConfigFilePath);
-
         // Create the instance of system config.
         std::shared_ptr<ISystemConfig> systemConfig;
         _configFactory->Create(systemConfig);
@@ -85,30 +85,75 @@ namespace Internal
         std::shared_ptr<ISystemConfigMutable> systemConfigMutable =
             std::static_pointer_cast<ISystemConfigMutable>(systemConfig);
 
-        // Set default config value.
+        // Set default values.
+        SetDefaultConfig(systemConfig);
+
+        try
+        {
+            ISystemConfigReader::ConfigurationMap configMap =
+                _configReader->ReadConfig(Default::ConfigFilePath);
+
+            try
+            {
+                float maxTemp;
+                float minTemp;
+
+                for (auto &[key, value] : configMap)
+                {
+                    if (key == "MinimumTemperature")
+                    {
+                        minTemp = std::stof(value);
+                    }
+                    else if (key == "MaximumTemperature")
+                    {
+                        maxTemp = std::stof(value);
+                    }
+                    else
+                    {
+                        std::cerr << "[Error] Unexpected config key: " << key << std::endl;
+                    }
+                }
+
+                if (minTemp >= maxTemp)
+                {
+                    throw XBaseException(std::string("Invalid temperature range is provide in config file -> ") + Default::ConfigFilePath);
+                }
+
+                systemConfigMutable->SetMinTemperatureRange(minTemp);
+                systemConfigMutable->SetMaxTemperatureRange(maxTemp);
+            }
+            catch (const std::invalid_argument &ex)
+            {
+                throw XBaseException(std::string("Invalid config data value -> ") + ex.what());
+            }
+        }
+        catch (const XFileNotFound &ex)
+        {
+            std::cerr << "[ERROR] File not found -> " << ex.what() << std::endl;
+        }
+        catch (const XConfigError &ex)
+        {
+            std::cerr << "[ERROR] Config file read error -> " << ex.what() << std::endl;
+        }
+
+        return systemConfig;
+    }
+
+    // #endregion
+
+    // #region Private Methods
+
+    void SystemConfigProcessor::SetDefaultConfig(std::shared_ptr<ISystemConfig> systemConfig)
+    {
+        // Cast to mutable entity to update the elements of entity.
+        std::shared_ptr<ISystemConfigMutable> systemConfigMutable =
+            std::static_pointer_cast<ISystemConfigMutable>(systemConfig);
+
         systemConfigMutable->SetMinTemperatureRange(Default::MinTemperature);
         systemConfigMutable->SetMaxTemperatureRange(Default::MaxTemperature);
         systemConfigMutable->SetCoolingIntensity(Default::CoolingIntensity);
         systemConfigMutable->SetHeatingIntensity(Default::HeatingIntensity);
         systemConfigMutable->SetSimulationIntensity(Default::SimulationIntensity);
-
-        for (auto &[key, value] : configMap)
-        {
-            if (key == "MinimumTemperature")
-            {
-                systemConfigMutable->SetMinTemperatureRange(std::stof(value));
-            }
-            else if (key == "MaximumTemperature")
-            {
-                systemConfigMutable->SetMaxTemperatureRange(std::stof(value));
-            }
-            else
-            {
-                std::cerr << "[Error] Unexpected config key: " << key << std::endl;
-            }
-        }
-
-        return systemConfig;
     }
 
     // #endregion

@@ -66,6 +66,13 @@ namespace Internal
         std::shared_ptr<FactoryInterfaces::ISystemConfigFactory> _configFactory;
 
         // #endregion
+
+        /**
+         * @brief Set the system configuration to default values.
+         *
+         * @param[in] systemConfig System configuration instance to set with.
+         */
+        void SetDefaultConfig(std::shared_ptr<EntityInterfaces::ISystemConfig> systemConfig);
     };
 } // namespace Internal
 END_TEMPERATURE_CONTROLLER_NS

@@ -11,6 +11,7 @@
 #include <thread>
 
 #include "Exceptions/XArgumentNull.hpp"
+#include "Exceptions/XBaseException.hpp"
 
 // #region Namespace Symbols
 
@@ -70,36 +71,45 @@ namespace Internal
 
     void TemperatureManager::Begin()
     {
-        // TODO: Fetch the system level configuration provided by user as an input data.
-
-        // Process the input params to prepare test config data entity.
-        std::shared_ptr<ISystemConfig> systemConfig = _systemConfigProcessor->PrepareConfig();
-
-        _temperatureController->Initialize(*systemConfig.get());
-
-        _displayManager->Initialize(*systemConfig.get());
-
-        _temperatureSimulator->Initialize(*systemConfig.get());
-
-        // Register with temperature sensor.
-        _temperatureSensor->RegisterObservers([this](float temperature)
-                                              {
-                                                TemperatureObserverCallback(temperature);
-                                              });
-
-        // Get the median of min and max as starting point for simulator.
-        float startingTemperature = (systemConfig->GetMinTemperatureRange() + systemConfig->GetMaxTemperatureRange()) / 2;
-
-        // Start temperature simulator.
-        _temperatureSimulator->Start(startingTemperature);
-
-        // Start temperature sensor.
-        _temperatureSensor->Start();
-
-        // Stay here.
-        while (true)
+        try
         {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            // Process the input params to prepare test config data entity.
+            std::shared_ptr<ISystemConfig> systemConfig = _systemConfigProcessor->PrepareConfig();
+
+            _temperatureController->Initialize(*systemConfig.get());
+
+            _displayManager->Initialize(*systemConfig.get());
+
+            _temperatureSimulator->Initialize(*systemConfig.get());
+
+            // Register with temperature sensor.
+            _temperatureSensor->RegisterObservers([this](float temperature)
+                                                {
+                                                    TemperatureObserverCallback(temperature);
+                                                });
+
+            // Get the median of min and max as starting point for simulator.
+            float startingTemperature = (systemConfig->GetMinTemperatureRange() + systemConfig->GetMaxTemperatureRange()) / 2;
+
+            // Start temperature simulator.
+            _temperatureSimulator->Start(startingTemperature);
+
+            // Start temperature sensor.
+            _temperatureSensor->Start();
+
+            // TODO: Add signal handling mechanism.
+            while (true)
+            {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        }
+        catch (const XBaseException& ex)
+        {
+            // Do smooth wind-up.
+            _temperatureSensor->Stop();
+            _temperatureSimulator->Stop();
+
+            throw XBaseException(std::string("Exception caught in 'TemperatureManager::Begin()' -> ") + ex.what());
         }
     }
 

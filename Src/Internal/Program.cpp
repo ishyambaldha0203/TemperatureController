@@ -10,7 +10,6 @@
 #include "Internal/Program.hpp"
 
 #include "Exceptions/XArgumentNull.hpp"
-#include "Exceptions/XBaseException.hpp"
 
 // #region Namespace Symbols
 
@@ -47,7 +46,7 @@ namespace Internal
         {
             _temperatureManager->Begin();
         }
-        catch (const XBaseException &ex)
+        catch (const std::exception &ex)
         {
             std::cout << "Exception caught: " << ex.what() << std::endl;
 

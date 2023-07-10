@@ -15,13 +15,42 @@
 
 #include "Internal/SystemConfigReader.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <sstream>
+
+#include "Exceptions/XBaseException.hpp"
+#include "Exceptions/XConfigError.hpp"
+#include "Exceptions/XFileNotFound.hpp"
 
 // #region Namespace Symbols
 
+using namespace TEMPERATURE_CONTROLLER_NS::Exceptions;
 using namespace TEMPERATURE_CONTROLLER_NS::Interfaces;
 
 // #endregion
+
+namespace
+{
+    std::string Trim(const std::string &str)
+    {
+        std::string result = str;
+        result.erase(result.begin(), std::find_if(result.begin(),
+                                                  result.end(),
+                                                  [](unsigned char ch)
+                                                  {
+                                                    return !std::isspace(ch);
+                                                  }));
+
+        result.erase(std::find_if(result.rbegin(),
+                                  result.rend(),
+                                  [](unsigned char ch)
+                                  {
+                                    return !std::isspace(ch);
+                                  }).base(), result.end());
+        return result;
+    }
+}
 
 BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Internal
@@ -50,18 +79,43 @@ namespace Internal
         std::ifstream configFile(confFileName);
         if (!configFile)
         {
-            std::cerr << "[Error] Config file not found: " << confFileName << std::endl;
-
-            return configMap;
+            throw XFileNotFound("Config file not found: " + confFileName);
         }
 
         std::string line;
+        int lineNum = 0;
         while (std::getline(configFile, line))
         {
+            lineNum++;
+
+            // Ignore empty or white space only lines.
+            if (line.find_first_not_of(" \t\n\v\f\r") == std::string::npos)
+            {
+                continue;
+            }
+
             size_t pos = line.find('=');
 
-            std::string key = line.substr(0, pos);
-            std::string value = line.substr(pos + 1);
+            // Check for invalid lines.
+            if (pos == std::string::npos)
+            {
+                std::stringstream ss;
+                ss << "Invalid config line #" << lineNum << ": " << line;
+
+                throw XConfigError(ss.str());
+            }
+
+            std::string key = Trim(line.substr(0, pos));
+            std::string value = Trim(line.substr(pos + 1));
+
+            // Check for duplicate keys.
+            if (configMap.count(key) > 0)
+            {
+                std::stringstream ss;
+                ss << "Duplicate key '" << key << "' found on line #" << lineNum;
+
+                throw XConfigError(ss.str());
+            }
 
             configMap[key] = value;
         }
