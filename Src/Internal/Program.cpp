@@ -40,7 +40,7 @@ namespace Internal
 
     int32_t Program::Run()
     {
-        std::cout << "Temperature monitoring and controlling has started!!!\n\n" << std::endl;
+        std::cout << "**** Temperature regulation is now in progress ****\n" << std::endl;
 
         try
         {

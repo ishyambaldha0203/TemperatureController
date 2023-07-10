@@ -31,14 +31,14 @@ namespace
 {
     namespace Default
     {
-        constexpr const float MinTemperature = 20.0f;            ///< Min temperature to start heater.
-        constexpr const float MaxTemperature = 21.0f;            ///< Max temperature to start cooler.
+        constexpr const float MinTemperature = 23.0f;            ///< Min temperature to start heater.
+        constexpr const float MaxTemperature = 25.0f;            ///< Max temperature to start cooler.
         constexpr const float CoolingIntensity = 0.10f;          ///< Temperature lowered by heater per simulation cycle.
         constexpr const float HeatingIntensity = 0.10f;          ///< Temperature raised by heater per simulation cycle.
         constexpr const float SimulationIntensity = 0.5f;        ///< Used by simulator to generate random temperature between -0.5f to +0.5f.
         constexpr const uint32_t SimulationTimeCycleSeconds = 1; ///< Timing to be used bu simulator to update temperature.
         constexpr const uint32_t SensorTimeCycleSeconds = 1;     ///< Timing to be used by sensor to read the temperature.
-        constexpr const char *ConfigFilePath = "config.txt";
+        constexpr const char *ConfigFilePath = "TemperatureController.conf";
     }
 
     namespace DataKeys
@@ -95,8 +95,8 @@ namespace Internal
 
             try
             {
-                float maxTemp;
-                float minTemp;
+                float minTemp = Default::MinTemperature;
+                float maxTemp = Default::MaxTemperature;
 
                 for (auto &[key, value] : configMap)
                 {
@@ -110,10 +110,11 @@ namespace Internal
                     }
                     else
                     {
-                        std::cerr << "[Error] Unexpected config key: " << key << std::endl;
+                        throw XBaseException(std::string("Unexpected configuration key: -> ") + key);
                     }
                 }
 
+                // Min temperature must be greater them max limit in temperature range.
                 if (minTemp >= maxTemp)
                 {
                     throw XBaseException(std::string("Invalid temperature range is provide in config file -> ") + Default::ConfigFilePath);
