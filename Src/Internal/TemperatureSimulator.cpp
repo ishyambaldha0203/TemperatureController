@@ -53,12 +53,12 @@ namespace Internal
 
     // #region Public Methods
 
-    void TemperatureSimulator::Initialize(const ISystemConfig &systemConfig)
+    void TemperatureSimulator::Initialize(const ISystemConfig &systemConfig) noexcept
     {
         _simulationIntensity = systemConfig.GetSimulationIntensity();
     }
 
-    float TemperatureSimulator::GetTemperature() const
+    float TemperatureSimulator::GetTemperature() const noexcept
     {
         return _currentTemperature;
     }
@@ -92,7 +92,7 @@ namespace Internal
             });
     }
 
-    void TemperatureSimulator::Stop()
+    void TemperatureSimulator::Stop() noexcept
     {
         _isStopEvent = true;
     }

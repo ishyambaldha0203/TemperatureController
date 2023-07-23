@@ -33,7 +33,7 @@ namespace Internal
          * 
          * @param temperatureSimulator 
          */
-        TemperatureSensor(std::shared_ptr<Interfaces::ITemperatureSimulator> temperatureSimulator);
+        explicit TemperatureSensor(std::shared_ptr<Interfaces::ITemperatureSimulator> temperatureSimulator);
 
         /**
          * @brief Destroy the temperature manager object.

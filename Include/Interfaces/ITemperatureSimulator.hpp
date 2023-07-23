@@ -28,14 +28,14 @@ namespace Interfaces
          *
          * @param systemConfig entity that contains system level configurations.
          */
-        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) = 0;
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) noexcept = 0;
 
         /**
          * @brief Get the temperature value.
          *
          * @return A current temperature value.
          */
-        virtual float GetTemperature() const = 0;
+        virtual float GetTemperature() const noexcept = 0;
 
         /**
          * @brief Start generating real time temperature value.
@@ -47,7 +47,7 @@ namespace Interfaces
         /**
          * @brief Stop the temperature simulator.
          */
-        virtual void Stop() = 0;
+        virtual void Stop() noexcept = 0;
     };
 } // namespace Interfaces
 END_TEMPERATURE_CONTROLLER_NS

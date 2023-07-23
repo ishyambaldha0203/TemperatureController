@@ -61,13 +61,13 @@ namespace Internal
         PopulateText(temperatureString + degreeCelsius);
     }
 
-    void DisplayManager::Initialize(const ISystemConfig &systemConfig)
+    void DisplayManager::Initialize(const ISystemConfig &systemConfig) noexcept
     {
         _minTemperature = systemConfig.GetMinTemperatureRange();
         _maxTemperature = systemConfig.GetMaxTemperatureRange();
     }
 
-    void DisplayManager::PopulateText(const std::string &data)
+    void DisplayManager::PopulateText(const std::string &data) noexcept
     {
         std::cout << data << std::flush;
     }

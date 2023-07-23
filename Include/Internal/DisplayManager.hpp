@@ -40,9 +40,9 @@ namespace Internal
 
         virtual void DisplayTemperature(float temperature) override;
 
-        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) override;
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) noexcept override;
 
-        virtual void PopulateText(const std::string &data) override;
+        virtual void PopulateText(const std::string &data) noexcept override;
 
         // #endregion
 

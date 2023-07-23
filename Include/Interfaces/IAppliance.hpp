@@ -26,7 +26,7 @@ namespace Interfaces
          *
          * @param intensity Appliance running intensity.
          */
-        virtual void Initialize(float intensity) = 0;
+        virtual void Initialize(float intensity) noexcept = 0;
 
         /**
          * @brief Start the appliance.
@@ -44,7 +44,7 @@ namespace Interfaces
          * @retval true If the appliance is in running state.
          * @retval false If the appliance is not running.
          */
-        virtual bool IsRunning() = 0;
+        virtual bool IsRunning() const noexcept = 0;
     };
 } // namespace Interfaces
 END_TEMPERATURE_CONTROLLER_NS

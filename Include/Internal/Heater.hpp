@@ -43,13 +43,13 @@ namespace Internal
 
         // #region IAppliance Implementation
 
-        virtual void Initialize(float intensity) override;
+        virtual void Initialize(float intensity) noexcept override;
 
         virtual void Start() override;
 
         virtual void Stop() override;
 
-        virtual bool IsRunning() override;
+        virtual bool IsRunning() const noexcept override;
 
         // #endregion
 

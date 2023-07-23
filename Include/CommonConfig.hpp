@@ -20,7 +20,7 @@
  * @see END_TEMPERATURE_CONTROLLER_NS
  */
 #define BEGIN_TEMPERATURE_CONTROLLER_NS \
-    namespace TemperatureController     \
+    namespace TemperatureControllerNamespace     \
     {
 
 /**
@@ -36,7 +36,7 @@
  *
  * Use this macro to reference the namespace in declarations.
  */
-#define TEMPERATURE_CONTROLLER_NS TemperatureController
+#define TEMPERATURE_CONTROLLER_NS TemperatureControllerNamespace
 
 /**
  * @brief Simple convenience macro used to specifically semantically indicate declaration of an

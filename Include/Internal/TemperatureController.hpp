@@ -27,9 +27,9 @@ namespace Internal
 
         /**
          * @brief Construct a new temperature controller object.
-         * 
-         * @param cooler 
-         * @param heater 
+         *
+         * @param cooler
+         * @param heater
          */
         TemperatureController(std::shared_ptr<Interfaces::IAppliance> cooler,
                               std::shared_ptr<Interfaces::IAppliance> heater);
