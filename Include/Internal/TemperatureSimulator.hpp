@@ -33,7 +33,7 @@ namespace Internal
          * 
          * @param applianceConfig 
          */
-        TemperatureSimulator(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig);
+        explicit TemperatureSimulator(std::shared_ptr<EntityInterfaces::IApplianceConfig> applianceConfig);
 
         /**
          * @brief Destroy the temperature simulator object.
@@ -44,13 +44,13 @@ namespace Internal
 
         // #region ITemperatureSimulator Implementation
 
-        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) override;
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) noexcept override;
 
-        virtual float GetTemperature() const override;
+        virtual float GetTemperature() const noexcept override;
 
         virtual void Start(float startingTemperature) override;
 
-        virtual void Stop() override;
+        virtual void Stop() noexcept override;
 
         // #endregion
 

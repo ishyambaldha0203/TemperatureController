@@ -32,9 +32,15 @@ using namespace TEMPERATURE_CONTROLLER_NS::Interfaces;
 
 namespace
 {
-    std::string Trim(const std::string &str)
+    /**
+     * @brief Trim the whitespaces around the provided intput string.
+     * 
+     * @param input An input string to be trimmed. 
+     * @return A Trimmed string.
+     */
+    std::string Trim(const std::string &input)
     {
-        std::string result = str;
+        std::string result = input;
         result.erase(result.begin(), std::find_if(result.begin(),
                                                   result.end(),
                                                   [](unsigned char ch)

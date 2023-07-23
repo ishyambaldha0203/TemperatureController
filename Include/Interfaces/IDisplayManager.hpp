@@ -35,14 +35,14 @@ namespace Interfaces
          *
          * @param systemConfig entity that contains system level configurations.
          */
-        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) = 0;
+        virtual void Initialize(const EntityInterfaces::ISystemConfig &systemConfig) noexcept = 0;
 
         /**
          * @brief Populate the text data on display.
          *
-         * @throw XInvalidArgument is data is empty.
+         * @param[in] data String to populate on display.
          */
-        virtual void PopulateText(const std::string &data) = 0;
+        virtual void PopulateText(const std::string &data) noexcept = 0;
     };
 } // namespace Interfaces
 END_TEMPERATURE_CONTROLLER_NS

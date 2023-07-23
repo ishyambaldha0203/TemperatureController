@@ -57,7 +57,7 @@ namespace Internal
 
     // #region Public Methods
 
-    void Cooler::Initialize(float coolingIntensity)
+    void Cooler::Initialize(float coolingIntensity) noexcept
     {
         if (coolingIntensity > 0)
         {
@@ -89,7 +89,7 @@ namespace Internal
         _isRunning = false;
     }
 
-    bool Cooler::IsRunning()
+    bool Cooler::IsRunning() const noexcept
     {
         return _isRunning;
     }

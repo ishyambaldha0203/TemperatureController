@@ -57,7 +57,7 @@ namespace Internal
 
     // #region Public Methods
 
-    void Heater::Initialize(float heatingIntensity)
+    void Heater::Initialize(float heatingIntensity) noexcept
     {
         if (heatingIntensity > 0)
         {
@@ -89,7 +89,7 @@ namespace Internal
         _isRunning = false;
     }
 
-    bool Heater::IsRunning()
+    bool Heater::IsRunning() const noexcept
     {
         return _isRunning;
     }

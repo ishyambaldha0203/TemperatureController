@@ -32,7 +32,7 @@ namespace Internal
          *
          * @throw XArgumentNull If input params are null.
          */
-        Program(std::shared_ptr<Interfaces::ITemperatureManager> temperatureManager);
+        explicit Program(std::shared_ptr<Interfaces::ITemperatureManager> temperatureManager);
 
         /**
          * @brief Destroy the Program object.
