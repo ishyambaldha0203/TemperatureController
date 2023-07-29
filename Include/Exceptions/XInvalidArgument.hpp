@@ -14,7 +14,7 @@ BEGIN_TEMPERATURE_CONTROLLER_NS
 namespace Exceptions
 {
     /**
-     * @brief Exception thrown for invalid arguments passed to an Lwa library function.
+     * @brief Exception thrown for invalid arguments passed to any function.
      *
      * This class serves as the base class for all argument-related exception types. Code should throw one
      * of the derived specific invalid-argument-related exception types.
